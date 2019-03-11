@@ -46,6 +46,10 @@ public class MainActivity extends AppCompatActivity {
         threadSwitch.threadSwitch();
     }
 
+    public void flatMap(View view) {
+
+    }
+
 
     public void simulateRxJava(View view) {
         MyObservable<String> observable = MyObservable.create(new MyObservableOSubscribe<String>() {
