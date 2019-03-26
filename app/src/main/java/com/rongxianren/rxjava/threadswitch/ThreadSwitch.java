@@ -42,7 +42,7 @@ public class ThreadSwitch {
                     System.out.println("我是map操作符  thread " + Thread.currentThread().getName());
                     return s;
                 })
-                .observeOn(Schedulers.newThread())
+
                 .filter(s -> {
                     System.out.println("我是filter操作符 thread " + Thread.currentThread().getName());
                     if (!TextUtils.isEmpty(s)) {
@@ -51,7 +51,6 @@ public class ThreadSwitch {
                         return false;
                     }
                 })
-                .observeOn(Schedulers.from(executor))
                 .subscribe(result -> {
                     System.out.println(result + "----thread---- " + Thread.currentThread().getName());
                 });

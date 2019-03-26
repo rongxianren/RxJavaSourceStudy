@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.rongxianren.rxjava.backpressure.BackPressure;
+import com.rongxianren.rxjava.backpressure.FlowableBackPressure;
 import com.rongxianren.rxjava.operators.MergeOperators;
 import com.rongxianren.rxjava.subscribeFlow.MyEmitter;
 import com.rongxianren.rxjava.subscribeFlow.MyObservable;
@@ -132,5 +133,10 @@ public class MainActivity extends AppCompatActivity {
                         System.out.println("onComplete");
                     }
                 });
+    }
+
+    public void flowableBackPressure(View view) {
+        FlowableBackPressure flowableBackPressure = new FlowableBackPressure();
+        flowableBackPressure.backPressure();
     }
 }
