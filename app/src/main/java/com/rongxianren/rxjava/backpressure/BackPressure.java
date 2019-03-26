@@ -1,11 +1,19 @@
 package com.rongxianren.rxjava.backpressure;
 
+
 import android.util.Log;
 
-import java.util.concurrent.TimeUnit;
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
 
-import io.reactivex.Observable;
+import io.reactivex.BackpressureStrategy;
+import io.reactivex.Flowable;
+import io.reactivex.FlowableEmitter;
+import io.reactivex.FlowableOnSubscribe;
+import io.reactivex.Scheduler;
 import io.reactivex.schedulers.Schedulers;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by tangyun on 2019/3/10.
@@ -13,19 +21,49 @@ import io.reactivex.schedulers.Schedulers;
 
 public class BackPressure {
 
+    public void backPressure() {
+        Flowable.create(new FlowableOnSubscribe<Integer>() {
+            @Override
+            public void subscribe(FlowableEmitter<Integer> emitter) throws Exception {
+//                Log.d(TAG, "发送事件 1");
+//                emitter.onNext(1);
+//                Log.d(TAG, "发送事件 2");
+//                emitter.onNext(2);
+//                Log.d(TAG, "发送事件 3");
+//                emitter.onNext(3);
+//                Log.d(TAG, "发送事件 4");
+//                emitter.onNext(4);
+//                Log.d(TAG, "发送完成");
+                for (int i = 0; i < 2100000000; i++) {
+                    emitter.onNext(i);
+                    System.out.println("发送完成" + i);
+                }
+                emitter.onComplete();
+            }
+        }, BackpressureStrategy.ERROR)
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.computation())
+                .subscribe(new Subscriber<Integer>() {
+                    @Override
+                    public void onSubscribe(Subscription s) {
 
-    public void backpressure() {
-        //被观察者每过1ms发射一个事件
-        Observable.interval(1, TimeUnit.MILLISECONDS)
-                .observeOn(Schedulers.newThread())
-                .subscribe((aLong) -> {
-                    //观察者每过800ms处理一个事件
-                    try {
-                        Thread.sleep(800);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
                     }
-                    Log.e("rx_test", "back_pressure：" + aLong);
+
+                    @Override
+                    public void onNext(Integer integer) {
+                        Log.d(TAG, "接收到了事件" + integer);
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
                 });
     }
+
 }
